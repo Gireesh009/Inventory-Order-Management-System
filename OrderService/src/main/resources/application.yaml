@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: OrderService
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_db
+    username: postgres
+    password: Manager123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: 8082
+
+# Product Service URL
+productService:
+    base-url: http://localhost:8081
+
+logging:
+  level:
+    org.ibs.orderservice: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 2
